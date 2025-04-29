@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ejercicio6parte1.html</title>
+
+<body>
+<div style="display:flex; flex-direction:column; align-items:center;"> <!-- Centramos todo lo que aparece en pantalla -->
+   <h1 style="font-style:italic; color:rgba(0,100,0,1);">PINCHA CUATRO VECES PARA CONSTRUIR DOS RECTAS Y DETERMINAR SU INTERSECCIÓN</h1>
+   <canvas id="myCanvas" width="500" height="500" style="border:3px solid green; background-color:rgba(144,238,144,0.3);" onclick="guardarclick(event)"></canvas> <!-- Creamos un canvas --> 
+   <p id="inf"></p>
+   <button onclick="reiniciarlienzo()" style="font-size:20px; padding:10px 20px;">Reiniciar lienzo</button> <!-- Creamos un botón para reiniciar -->
+</div>
+
+
+
+<script>
+ let puntos=[]; //Declaramos la lista puntos vacía donde almacenaremos los puntos obtenidos por el usuario al hacer click.
+ var c=document.getElementById('myCanvas'); //Busca el canvas con identificador myCanvas y lo almacena en la variable c.
+ var ctx=c.getContext('2d'); //Devuelve un objeto del canvas que contiene las funciones necesarias para dibujar.
+ var info=document.getElementById('inf'); //Busca el identificador inf y lo almacena en la variable info.
+
+ //Definimos la función para dibujar una recta a partir de dos puntos en el lienzo.
+ function crearrecta(p1,p2,color){
+    let x0,x1,y0,y1; //Declaramos las variables. 
+    if(p2.x-p1.x==0){ //Si la coordenada de la x de los dos puntos son iguales, dibujamos la recta vertical.
+      x0=p1.x;
+      x1=p1.x;
+      y0=0;
+      y1=c.height;
+    }else{
+      const m=(p2.y-p1.y)/(p2.x-p1.x); //Calculamos la pendiente de la recta.
+      const b=p1.y-m*p1.x; //Calculamos la ordenada en el origen.
+      x0=0;
+      x1=c.width;
+      y0=m*x0+b;
+      y1=m*x1+b;
+    }
+
+    //Dibujamos la recta.
+    ctx.strokeStyle=color;
+    ctx.beginPath();
+    ctx.moveTo(x0,y0);
+    ctx.lineTo(x1,y1);
+    ctx.stroke();
+ }
+
+ //Definimos la función para calcular el punto intersección. 
+ function calcularinterseccion(p1,p2,p3,p4){ 
+    const a1=p2.y-p1.y;
+    const b1=p1.x-p2.x;
+    const c1=a1*p1.x+b1*p1.y; //Forma general de la primera recta: a*x+b*y=c
+
+    const a2=p4.y-p3.y;
+    const b2=p3.x-p4.x;
+    const c2=a2*p3.x+b2*p3.y; //Forma general de la segunda recta: a*x+b*y=c
+
+    const det=a1*b2-a2*b1; //Calculamos el determinante para aplicar la regla de Cramer.
+
+    if(det==0){
+      return null; //Si el determinante es 0, las rectas son paralelas.
+    }else{
+      const x=(b2*c1-b1*c2)/det;
+      const y=(a1*c2-a2*c1)/det;
+      return {x,y}; //Son secantes y hallamos el punto de intersección.
+    }
+ }
+
+ //Definimos la función que registra los clicks que hace el usuario.
+ function guardarclick(event){ 
+    //Obtenemos las coordenadas del click en el lienzo.
+    var recta=c.getBoundingClientRect();
+    var x=event.clientX-recta.x;
+    var y=event.clientY-recta.y;
+
+    //Añadimos el punto a la lista.
+    puntos.push({x,y});
+
+    //Cuando hay 2 puntos en la lista, dibujamos la primera recta.
+    if(puntos.length==2){
+      crearrecta(puntos[0],puntos[1],'red');
+    }
+    //Cuando hay 4 puntos en la lista, dibujamos la segunda recta y calculamos la intersección.
+    else if(puntos.length==4){
+      crearrecta(puntos[2],puntos[3],'blue');
+      const interseccion=calcularinterseccion(puntos[0],puntos[1],puntos[2],puntos[3]); //Calculamos la intersección entre las dos rectas.
+
+      if(interseccion){ //Si hay intersección, vamos a dibujar el punto.
+        ctx.fillStyle='green';
+        ctx.beginPath();
+        ctx.arc(interseccion.x,interseccion.y,3,0,2*Math.PI); //Dibujamos el punto de intersección.
+        ctx.fill();
+        info.innerText="La intersección de las dos rectas es: ("+interseccion.x.toFixed(2)+", "+interseccion.y.toFixed(2)+")"; //Dos decimales.
+      }else{
+        info.innerText="Las rectas son paralelas.";
+      }
+    }
+ }
+
+ //Definimos la función para reiniciar el lienzo.
+ function reiniciarlienzo(){ 
+   puntos.length=0; //Vaciamos la lista de puntos.
+   ctx.clearRect(0,0,c.width,c.height); //Borramos el lienzo.
+   info.innerText="";
+ }
+</script>
+
+</body>
+</html>

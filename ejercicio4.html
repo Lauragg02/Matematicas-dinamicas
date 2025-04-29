@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ejercicio4.html</title>
+
+<body>
+<script>
+//Definimos una función que devuelve true cuando hay un cambio de signo en el intervalo [a,b].
+function cambiosigno(f,a,b){
+    return f(a)*f(b)<0;
+}
+
+//Definimos la función que realiza el método de la bisección para encontrar soluciones a ecuaciones no lineales de la forma f(x)=0.
+function Biseccion(f,a,b,n){
+     //f es la función, a es el valor inferior del intervalo, b es el valor superior del intervalo y n es el número de iteraciones a realizar.
+     
+     //Se comienza comprobando si los extremos del intervalo a o b son soluciones de la ecuación.
+     if(Math.abs(f(a))<0.0000001){ //Se comprueba si el valor absoluto de la imagen de a es muy próximo a cero.
+        console.log("La ecuación no lineal tiene como solución x="+a); 
+        return a; //Si se cumple esa condición a es solución.
+     }
+     if(Math.abs(f(b))<0.0000001){ //Se comprueba si el valor absoluto de la imagen de b es muy próximo a cero.
+        console.log("La ecuación no lineal tiene como solución x="+b);
+        return b; //Si se cumple esa condición b es solución.
+     }
+     
+     //Verificamos si hay una solución en el intervalo mediante el teorema de Bolzano (se asume que la función introducida es continua).
+     if(cambiosigno(f,a,b)==false){ //Si no hay cambio de signo no se garantiza que exista solución y no se podría aplicar el método de la bisección.
+        console.log("No hay garantía de que exista una solución en el intervalo.");
+        return;
+     }  
+     
+     let puntomedio; //Declaramos la variable puntomedio.
+     //Realizamos un bucle para llevar a cabo las n iteraciones.
+     for(let i=0;i<n;i++){
+        puntomedio=(a+b)/2; //Definimos el punto medio del intervalo.
+        
+        //Se comprueba si el punto medio obtenido es solución de la ecuación no lineal.
+        if(Math.abs(f(puntomedio))<0.0000001){ //Se comprueba si el valor absoluto de la imagen del punto medio es muy próximo a cero.
+            console.log("La solución aproximada de la ecuación no lineal es x="+puntomedio);
+            return puntomedio; //Si se cumple esa condición puntomedio es solución.
+        }
+
+        //Elegimos el subintervalo en el que f cambia de signo.
+        if(cambiosigno(f,a,puntomedio)==true){
+            b=puntomedio;
+        }else{
+            a=puntomedio;
+        }
+     }
+     //Devolvemos la aproximación de la solución a la ecuación no lineal introducida.
+     console.log("La solución aproximada de la ecuación no lineal es x="+puntomedio); 
+     return puntomedio; 
+
+}
+
+//Definimos varias funciones provenientes de ecuaciones no lineales de la forma f(x)=0.
+function g(x){
+    return x**3-2;
+}
+function h(x){
+    return Math.cos(x)-x;
+}
+function j(x) {
+    return x**3-x-1;
+}
+function k(x) {
+    return Math.exp(-x)-x;
+}
+
+//Comprobamos que el método de la bisección implementado funciona correctamente.
+Biseccion(g,1,2,5);
+Biseccion(h,0,1,5);
+Biseccion(j,1,2,10);
+Biseccion(k,0,1,10);
+</script>
+
+</body>
+</html>

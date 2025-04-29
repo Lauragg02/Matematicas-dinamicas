@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ejercicio6parte2.html</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+      R: "{\\mathbb R}",
+      N: "{\\mathbb N}",
+      Z: "{\\mathbb Z}",
+      bold: ["{\\bf #1}",1]
+    }
+  }
+});
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+TeX: {
+  extensions: ["AMSmath.js", "AMSsymbols.js", "color.js"]
+}
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML' async></script>
+
+<body>
+<div style="display:flex; flex-direction:column; align-items:center;"> <!-- Centramos todo lo que aparece en pantalla -->
+   <h1 style="font-style:italic; color:rgba(0,76,153,1);">DEMOSTRACIÓN INTERACTIVA DEL TEOREMA DE TALES</h1>
+   <p style="font-size:20px;"><strong>Enunciado del Teorema de Tales (aplicado a triángulos):</strong></p>
+   <p style="font-size:18px;">Si una recta paralela a uno de los lados de un triángulo corta a los otros dos lados, entonces divide esos lados en segmentos proporcionales. Es decir: $$\frac{AD}{DB}=\frac{AE}{EC}$$</p>
+   <canvas id="myCanvas" width="600" height="400" style="background-color:rgba(102,178,255,0.2)";></canvas><!-- Creamos un canvas -->
+   <p id="inf"></p><!-- Parráfo vacío donde más tarde se mostrarán las proporciones calculadas -->
+   <p style="font-size:18px; text-align:center;">Como hemos podido observar, al mover el segmento DE manteniéndolo paralelo a uno de los lados del triángulo, los lados opuestos se dividen en segmentos proporcionales. Esto demuestra el Teorema de Tales.</p>
+</div>
+
+
+<script>
+var c=document.getElementById("myCanvas"); //Busca el canvas con identificador myCanvas y lo almacena en la variable c.
+var ctx=c.getContext("2d"); //Devuelve un objeto del canvas que contiene las funciones necesarias para dibujar.
+
+//Coordenadas de los vértices del triángulo en píxeles.
+const A={x:300,y:50};    //Vértice superior.
+const B={x:100,y:350};   //Vértice inferior izquierdo.
+const C={x:500,y:350};   //Vértice inferior derecho.
+
+//Altura inicial de la recta paralela.
+let alturaparalela=160;
+
+//Definimos la función para dibujar una línea entre dos puntos.
+function dibujarsegmento(p1,p2,color){
+  ctx.strokeStyle=color;
+  ctx.beginPath();
+  ctx.moveTo(p1.x,p1.y); //Inicio línea.
+  ctx.lineTo(p2.x,p2.y); //Final línea.
+  ctx.stroke();
+}
+
+//Definimos la función para calcular la intersección de un segmento con un segmento horizontal.
+function interseccion(p1,p2,y){
+  var m=(p2.y-p1.y)/(p2.x-p1.x); //Calculamos la pendiente.
+  var x=(y-p1.y)/m+p1.x; //Despejamos x del segmento.
+  return {x:x,y:y}; //Intersección con segmento horizontal.
+}
+
+//Definimos la función para calcular la distancia entre dos puntos.
+function distancia(p1,p2){
+  return Math.hypot(p2.x-p1.x,p2.y-p1.y); //Calcumos la distancia entre los puntos.
+}
+
+//Definimos la función para dibujar un punto con etiqueta.
+function dibujarpunto(p,etiqueta){
+  ctx.fillStyle="black";
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,4,0,2*Math.PI); //Dibujamos el punto.
+  ctx.fill();
+  ctx.fillText(etiqueta,p.x+6,p.y-6); //Añadimos la etiqueta fijando su posición.
+}
+
+//Definimos la función para realizar todo el dibujo a partir de las anteriores funciones.
+function dibujar(){
+  ctx.clearRect(0,0,c.width,c.height); //Limpiamos el lienzo.
+
+  //Dibujamos el triángulo.
+  dibujarsegmento(A,B,'blue');
+  dibujarsegmento(A,C,'blue');
+  dibujarsegmento(B,C,'blue'); 
+
+  //Determinamos las intersecciones del segmento con los lados del triángulo.
+  const D=interseccion(A,B,alturaparalela);
+  const E=interseccion(A,C,alturaparalela);
+
+  //Dibujamos el segmento paralelo a un lado del triángulo.
+  dibujarsegmento(D,E,'red');
+
+  //Dibujamos los puntos y les ponemos su etiqueta.
+  dibujarpunto(A,"A");
+  dibujarpunto(B,"B");
+  dibujarpunto(C,"C");
+  dibujarpunto(D,"D");
+  dibujarpunto(E,"E");
+
+  //Calculamos las longitudes de los segmentos.
+  const AD=distancia(A,D);
+  const DB=distancia(D,B);
+  const AE=distancia(A,E);
+  const EC=distancia(E,C);
+
+  //Calculamos las razones.
+  const razon1=(AD/DB).toFixed(2);
+  const razon2=(AE/EC).toFixed(2);
+
+  //Muestra en pantalla las razones.
+  const razones="$$\\frac{AD}{DB}="+razon1+" \\quad \\quad \\frac{AE}{EC}="+razon2+"$$";
+  document.getElementById("inf").innerHTML=razones;
+
+  if(typeof MathJax!=='undefined'){ //Verificamos si MathJax está cargado y en caso de que no lo esté, escribe de forma correcta las fórmulas de inf.
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("inf")]);
+  }
+}
+
+//Creamos la variable mover para que el usuario pueda mover el segmento.
+let mover=false;
+
+//Verificamos que el click que ha hecho el usuario esté a menos de 10 píxeles. Si está cerca, mover se vuelve true.
+c.addEventListener("mousedown",(e)=>{
+  if(Math.abs(e.offsetY-alturaparalela)<10){
+     mover=true; 
+  }
+});
+
+//Mientras el usuario mueve el ratón.
+c.addEventListener("mousemove",(e)=>{
+  if(mover==true){ //Si mover es true entonces cambia la posición del segmento a donde se encuentre el ratón.
+    alturaparalela=e.offsetY;
+    dibujar(); //Dibujamos de nuevo.
+  }
+});
+
+//Si el usuario suelta el ratón, la variable mover se vuelve false.
+c.addEventListener("mouseup",()=>{
+  mover=false;
+});
+
+//Dibujamos desde el principio cuando cargue la página web.
+dibujar();
+</script>
+
+</body>
+</html>
+
+
+
+

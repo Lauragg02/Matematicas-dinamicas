@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ejercicio2.html</title>
+
+<body>
+<i><h1 style="background-color:rgba(0,102,204,0.7); color:White; text-align:center;border:3px solid yellow;">CUERPOS GEOMÉTRICOS</h1></i>
+
+
+<p>Los <strong>cuerpos geométricos</strong> son figuras tridimensionales, es decir, tienen volumen. Podemos distinguir dos tipos: </p>
+
+<ul style="list-style-type:square;">
+      <li> <strong>Poliedros:</strong> Están formados por caras planas que son polígonos. Algunos ejemplos son:</li>
+      <ul>
+         <li> Tetraedro </li>
+         <li> Prisma </li>
+         <li> Pirámide </li>
+      </ul>
+      <li> <strong>Cuerpos de revolución:</strong> Se forman al girar una figura plana alrededor de uno de sus ejes. Algunos ejemplos son: </li>
+      <ul>
+         <li> Cilindro </li>
+         <li> Cono </li>
+         <li> Esfera </li>
+      </ul>
+</ul>
+ 
+A continuación, vamos a centrarnos en los <strong>poliedros</strong>. Los elementos de estos cuerpos geométricos son los siguientes:
+<ul style="list-style-type:circle;">
+      <li> <strong>Cara:</strong> superficies planas que forman el poliedro. </li>
+      <li> <strong>Aristas:</strong> lados de los polígonos. </li>
+      <li> <strong>Vértices:</strong> puntos en donde cortan las aristas. </li>
+      <li> <strong>Diagonal de una cara:</strong> segmento que une dos vértices que no son adyacentes de una misma cara. </li>
+      <li> <strong>Ángulo diedro:</strong> ángulo que está formado por dos caras. </li>
+      <li> <strong>Ángulo poliedro:</strong> ángulo formado por tres o más caras. </li>
+</ul>
+
+Podemos clasificar los poliedros según diferentes criterios.
+
+<table style="width:100%; border:2px solid black; text-align:center; table-layout:fixed; margin-top:15px; margin-bottom:15px;">
+   <tr style="background-color:green; color: white;">
+     <td style="border: 1px solid lightgrey;"><i><strong>Según la regularidad de sus caras</strong></i></td>
+     <td style="border: 1px solid lightgrey;"><i><strong>Según sus ángulos diedros</strong></i></td>
+   </tr>
+   <tr style="background-color:lightgreen;">
+      <td style="border: 1px solid lightgrey;"><strong>Poliedros regulares</strong>
+        <ol>
+          <li style="text-align:left;"> Todas sus caras son polígonos regulares y son iguales </li>
+          <li style="text-align:left;"> Todos sus vértices tienen el mismo número de caras que se encuentran en ellos </li>
+          <li style="text-align:left;"> Todas sus aristas tienen la misma longitud </li>
+          <li style="text-align:left;"> Tienen simetría total </li>
+        </ol>
+      </td>
+      <td style="border: 1px solid lightgrey; vertical-align:top; "><strong>Poliedros convexos</strong>
+        <ol>
+          <li style="text-align:left;"> Todos sus ángulos diedros son menores de 180&deg; </li>
+          <li style="text-align:left;"> Todos sus ángulos son convexos </li>
+          <li style="text-align:left;"> Tienen una forma compacta y sin pliegues hacia adentro </li>
+        </ol>
+      </td>
+   </tr>
+   <tr style="background-color:lightgreen;">
+      <td style="border: 1px solid lightgrey;"><strong>Poliedros irregulares</strong>
+         <ol>
+          <li style="text-align:left;"> Sus caras no son todas iguales </li>
+          <li style="text-align:left;"> El número de caras que coinciden en cada vértice puede variar </li>
+          <li style="text-align:left;"> No todas sus aristas son iguales </li>
+          <li style="text-align:left;"> No tienen simetría total pero pueden tener simetrías parciales </li>
+        </ol>
+      </td>
+      <td style="border: 1px solid lightgrey; vertical-align:top; "><strong>Poliedros cóncavos</strong>
+        <ol>
+          <li style="text-align:left;"> Tiene algún ángulo diedro mayor de 180&deg; </li>
+          <li style="text-align:left;"> Alguno de sus ángulos es cóncavo </li>
+          <li style="text-align:left;"> Su forma puede parecer más compleja o con huecos </li>
+        </ol>
+      </td>
+   </tr>
+ </table>
+
+<p style="color:rgba(0,102,204,1); text-align:center; font-size: 20px"><strong>RELACIÓN DE EULER</strong></p>
+<p>Todo poliedro convexo cumple que el número de caras, C, más el número de vértices, V, es igual al número de aristas, A,  más dos. Esta relación es llamada fórmula de Euler.</p>
+<p style="text-align:center; font-size:20px"><strong>C+V=A+2</strong></p> 
+
+<table style="width:100%; border:2px solid black; text-align:center; table-layout:fixed; margin-top:15px; margin-bottom:15px;">
+  <tr>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;"><strong>Nombre</strong></td>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;"><strong>Cara</strong></td>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;"><strong>Nº de caras</strong></td>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;"><strong>Nº de vértices</strong></td>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;"><strong>Nº de aristas</strong></td>
+  </tr>
+  <tr>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;">Hexaedro o cubo</td>
+    <td style="border: 1px solid lightgrey;">Cuadrado</td>
+    <td style="border: 1px solid lightgrey;">6</td>
+    <td style="border: 1px solid lightgrey;">8</td>
+    <td style="border: 1px solid lightgrey;">12</td>
+  </tr>
+  <tr>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;">Tetraedro</td>
+    <td style="border: 1px solid lightgrey;">Triángulo</td>
+    <td style="border: 1px solid lightgrey;">4</td>
+    <td style="border: 1px solid lightgrey;">4</td>
+    <td style="border: 1px solid lightgrey;">6</td>
+  </tr>
+  <tr>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;">Octaedro</td>
+    <td style="border: 1px solid lightgrey;">Triángulo</td>
+    <td style="border: 1px solid lightgrey;">8</td>
+    <td style="border: 1px solid lightgrey;">6</td>
+    <td style="border: 1px solid lightgrey;">12</td>
+  </tr>
+  <tr>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;">Icosaedro</td>
+    <td style="border: 1px solid lightgrey;">Triángulo</td>
+    <td style="border: 1px solid lightgrey;">20</td>
+    <td style="border: 1px solid lightgrey;">12</td>
+    <td style="border: 1px solid lightgrey;">30</td>
+  </tr>
+  <tr>
+    <td style="background-color:lightblue; border: 1px solid lightgrey;">Dodecaedro</td>
+    <td style="border: 1px solid lightgrey;">Pentágono</td>
+    <td style="border: 1px solid lightgrey;">12</td>
+    <td style="border: 1px solid lightgrey;">20</td>
+    <td style="border: 1px solid lightgrey;">30</td>
+  </tr>
+</table>
+<p><strong>EJERCICIO.</strong> Si un poliedro convexo tiene 23 caras y 37 aristas, ¿cuántos vértices tiene?</p>
+<p>Tiene <input type="text" name="Texto" value="" id="texto1"> vértices.</p>
+<p><strong>EJERCICIO.</strong> ¿Es posible que un poliedro tenga 9 caras, 20 aristas y 13 vértices? Elige la opción correcta.</p>
+<ol type="a">
+       <li> <input type="checkbox" name="checkBox" value="Valor 1" id="checkbox1"> Solo si el poliedro no es convexo. </li> 
+       <li> <input type="checkbox" name="checkBox" value="Valor 2" id="checkbox2"> No, porque no existe ese poliedro. </li> 
+       <li> <input type="checkbox" name="checkBox" value="Valor 3" id="checkbox3"> Sí, porque cumple la relación de Euler.</li>  
+</ol>
+
+</body>
+</html>

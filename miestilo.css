@@ -1,0 +1,8 @@
+.tituloseccion {font-size:22px; color:red; font-weight:bold;}
+.teoria {background-color:LightYellow; font-size:17px;}
+.ejemplo {font-size:17px;}
+.ejercicio {font-size:17px; background-color:rgba(64, 224, 208, 1); font-style:italic;}
+.solucion {background-color:rgba(255, 182, 193, 0.4);  padding:10px;  border-left:5px solid red;}
+.resultado {font-weight:bold; border:2px solid red; padding:3px;}
+.importante {font-size:17px; background-color:rgba(0, 201, 87, 0.3); }
+.formula {font-size:20px; font-weight:bold; color:red; }
