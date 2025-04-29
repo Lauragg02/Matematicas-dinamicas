@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ejercicio5parte1.html</title>
+
+<body>
+<div style="display:flex; flex-direction:column; align-items:center;"> <!-- Centramos todo lo que aparece en pantalla -->
+   <h1 style="font-style:italic; color:rgba(139,0,0,1); text-align:center;">HAZ CLICK EN EL LIENZO Y VE DIBUJANDO UNA LÍNEA POLIGONAL</h1>
+   <canvas id="myCanvas" width="500" height="500" style="border:3px solid red; background-color:rgba(255,200,200,0.3); "onclick="dibujarlinea(event)"></canvas> <!-- Creamos un canvas -->
+   <br>
+   <button onclick="reiniciarlienzo()" style="font-size:20px; padding:10px 20px;">Reiniciar lienzo</button> <!-- Creamos un botón para reiniciar -->
+</div>
+
+
+
+<script>
+const puntos=[]; //Declaramos la lista puntos vacía donde almacenaremos los puntos obtenidos por el usuario al hacer click.
+
+//Definimos la función que se iniciará cada vez que hagamos click.
+function dibujarlinea(event){
+  var c=document.getElementById("myCanvas"); //Busca el canvas con identificador myCanvas y lo almacena en la variable c.
+  var ctx=c.getContext("2d"); //Devuelve un objeto del canvas que contiene las funciones necesarias para dibujar.
+
+  //Obtenemos las coordenadas del click en el lienzo.
+  var recta=c.getBoundingClientRect();
+  var x=event.clientX-recta.x;
+  var y=event.clientY-recta.y;
+
+  //Añadimos el punto a la lista.
+  puntos.push({x,y});
+
+  //Limpiamos el lienzo para dibujar desde el principio sin repetir líneas ya dibujadas. 
+  ctx.clearRect(0,0,c.width,c.height);
+
+  //Dibujamos la línea poligonal conectando todos los puntos.
+  ctx.beginPath(); //Indica que se va a dibujar un camino.
+  ctx.moveTo(puntos[0].x,puntos[0].y); //Crea el punto de inicio de una línea.
+  for(let i=1;i<puntos.length;i++){ //Este bucle dibuja líneas desde el punto anterior al siguiente.
+     ctx.lineTo(puntos[i].x,puntos[i].y);
+  }
+  ctx.stroke(); //Dibuja la línea.
+}
+
+//Definimos la función para reiniciar el lienzo.
+function reiniciarlienzo(){
+  var c=document.getElementById("myCanvas");
+  var ctx=c.getContext("2d");
+
+  puntos.length=0; //Vaciamos la lista de puntos.
+  ctx.clearRect(0,0,c.width,c.height); //Borramos el lienzo.
+}
+</script>
+
+</body>
+</html>

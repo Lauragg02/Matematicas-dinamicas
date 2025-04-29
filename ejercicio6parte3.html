@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ejercicio6parte3.html</title>
+<script src='https://algebra.js.org/javascripts/algebra-0.2.6.min.js' ></script>  
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+      R: "{\\mathbb R}",
+      N: "{\\mathbb N}",
+      Z: "{\\mathbb Z}",
+      bold: ["{\\bf #1}",1]
+    }
+  }
+});
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+TeX: {
+  extensions: ["AMSmath.js", "AMSsymbols.js", "color.js"]
+}
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML' async></script>
+
+<body>
+<div style="display:flex; flex-direction:column; align-items:center;"><!-- Centramos todo lo que aparece en pantalla -->
+   <h1 style="font-style:italic; color:rgba(255,140,0,1);">RESUELVE EL SISTEMA DE ECUACIONES</h1>
+   <p style="font-size:20px;"><strong>El sistema de ecuaciones es:</strong></p>
+   <p id="sistema" style="font-size:20px;"></p><!-- Aquí aparecerá el sistema generado aleatoriamente -->
+   <p style="font-size:20px;">Introduce la solución:</p>
+   <p style="font-size:17px;">Cuando quieras introducir una fracción, introduce el número decimal correspondiente.</p>
+   X = <input type="number" class="w3-input w3-border" step="any" id="respuestaX"><!-- Valor que introduce el usuario para la x -->
+   Y = <input type="number" class="w3-input w3-border" step="any" id="respuestaY"><!-- Valor que introduce el usuario para la y -->
+   <br>
+   <p style="font-size:17px;">Pulsa el botón comprobar para verificar si la solución introducida es correcta.</p>
+   <button onclick="comprobarsolucion()" style="font-size:20px; padding:10px 20px;">Comprobar</button><!-- Creamos un botón para comprobar la solución -->
+   <p style="font-size:17px;">Pulsa el botón resolver para obtener los pasos detallados que conducen a la solución.</p>
+   <button onclick="resolversistema()" style="font-size:20px; padding:10px 20px;">Resolver</button><!-- Creamos un botón para resolver el sistema -->
+   <p style="font-size:17px;">Pulsa el botón nuevo sistema para generar otro sistema distinto.</p>
+   <button onclick="generarsistema()" style="font-size:20px; padding:10px 20px;">Nuevo sistema</button><!-- Creamos un botón para generar otro sistema -->
+   <br>
+   <p id="comprobacion" style="font-size:18px;"></p><!-- Dirá al usuario si la respuesta es correcta o no -->
+   <div style="display:flex; flex-direction:row; justify-content:center; align-items:center; gap:250px; margin-top:20px; width:100%;">
+     <div id="pasos" style="font-size:17px; text-align:left; width:400px;"></div>
+     <div><canvas id="myCanvas" width="450" height="450" style="background-color:rgba(255,165,0,0.2);"></canvas></div>
+   </div>
+</div>
+
+
+
+<script>
+let a1,b1,c1,a2,b2,c2,xsol,ysol; //Declaramos las variables que usaremos a continuación.
+
+//Definimos la función para generar el sistema de manera aleatoria.
+function generarsistema(){ //Generamos los coeficientes a,b y c aleatoriamente.
+  a1=Math.floor(Math.random()*11)-5; //Generamos a1 entre -5 y 5 sin contar el 0.
+  while(a1==0){ 
+    a1=Math.floor(Math.random()*11)-5;
+  }
+  b1=Math.floor(Math.random()*11)-5; //Generamos b1 entre -5 y 5 sin contar el 0.
+  while(b1==0){
+    b1=Math.floor(Math.random()*11)-5;
+  }
+  c1=Math.floor(Math.random()*21)-10; //Generamos c1 entre -10 y 10, puede ser 0.
+  a2=Math.floor(Math.random()*11)-5; //Generamos a2 entre -5 y 5 sin contar el 0.
+  while(a2==0){
+    a2=Math.floor(Math.random()*11)-5;
+  }
+  b2=Math.floor(Math.random()*11)-5; //Generamos b2 entre -5 y 5 sin contar el 0.
+  while(b2==0){
+    b2=Math.floor(Math.random()*11)-5;
+  }
+  c2=Math.floor(Math.random()*21)-10; //Generamos c2 entre -10 y 10, puede ser 0.
+  mostrarsistema();
+  limpiarcanvas();
+  document.getElementById("comprobacion").innerText="";
+  document.getElementById("pasos").innerHTML="";
+}
+
+//Definimos la función para que aparezca el sistema de forma correcta.
+function mostrarsistema(){
+    let textosistema="$$\\left\\{\\begin{array}{l}"+a1+"x ";
+      if(b1>0){ //Si b1 es positivo se pone +.
+         textosistema+="+ "+b1+"y = ";
+      }else{ //Si b1 es negativo se pone -.
+         textosistema+="- "+Math.abs(b1)+"y = ";
+      }
+    textosistema+=c1;
+    textosistema+="\\\\";
+    textosistema+=a2+"x ";
+      if(b2>0){ //Si b2 es positivo se pone +.
+         textosistema+="+ "+b2+"y = ";
+      }else{ //Si b2 es negativo se pone -.
+         textosistema+="- "+Math.abs(b2)+"y = ";
+      }
+    textosistema+=c2;
+    textosistema+="\\end{array}\\right.$$";
+    document.getElementById("sistema").innerHTML=textosistema; //Asignamos el sistema generado al elemento sistema.
+
+    if(typeof MathJax!=='undefined'){ //Verificamos si MathJax está cargado y en caso de que no lo esté, escribe de forma correcta las fórmulas del sistema.
+       MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("sistema")]);
+    }
+}
+
+//Definimos la función para vaciar el lienzo.
+function limpiarcanvas(){
+    var c=document.getElementById("myCanvas"); //Busca el canvas con identificador myCanvas y lo almacena en la variable c.
+    var ctx=c.getContext("2d"); //Devuelve un objeto del canvas que contiene las funciones necesarias para dibujar.
+    ctx.clearRect(0,0,c.width,c.height); //Limpiamos el lienzo para dibujar desde el principio. 
+
+    //Dibujamos los ejes.
+    ctx.beginPath();
+    ctx.moveTo(0,c.height/2); ctx.lineTo(c.width,c.height/2); //Eje x
+    ctx.moveTo(c.width/2,0); ctx.lineTo(c.width/2,c.height); //Eje y
+    ctx.strokeStyle="Black";
+    ctx.stroke();
+}
+
+//Definimos la función para comprobar si es correcto el resultado introducido por el usuario.
+function comprobarsolucion(){
+    const xentrada=parseFloat(document.getElementById("respuestaX").value); //Tomamos el valor introducido en la x por el usuario.
+    const yentrada=parseFloat(document.getElementById("respuestaY").value); //Tomamos el valor introducido en la y por el usuario.
+    const comprobacion=document.getElementById("comprobacion"); 
+
+    if(isNaN(xentrada)||isNaN(yentrada)){ //Comprobamos si es un número lo introducido por el usuario. En caso de que al menos uno no lo sea se hace el if.
+        comprobacion.innerText="Introduce valores numéricos para la x y la y.";
+        return;
+    }
+    const eq1=a1*xentrada+b1*yentrada;
+    const eq2=a2*xentrada+b2*yentrada;
+
+    if(Math.abs(eq1-c1)<0.1 && Math.abs(eq2-c2)<0.1){ //Comprobamos que la respuesta es correcta permitiendo un error de 0.1.
+        comprobacion.innerText="¡Muy bien! La solución del sistema de ecuaciones introducida es correcta.";
+    }else{
+        comprobacion.innerText="Incorrecto. Inténtalo de nuevo.";
+    }
+}
+
+//Definimos la función para dibujar una recta en el lienzo.
+function dibujarrecta(a,b,d,color){
+    var c=document.getElementById("myCanvas"); //Busca el canvas con identificador myCanvas y lo almacena en la variable c.
+    var ctx=c.getContext("2d"); //Devuelve un objeto del canvas que contiene las funciones necesarias para dibujar.
+    //Definimos la escala y el ancho y largo del lienzo.
+    const escala=20;
+    const w=c.width;
+    const h=c.height;
+    //Determinamos el valor de la y teniendo en cuenta que hemos convertido la posición en píxeles en una coordenada x en el sistema de ejes cartesianos.
+    let y1=(d-a*(-w/2/escala))/b; 
+    let y2=(d-a*(w/2/escala))/b;
+    //Dibujamos la recta.
+    ctx.beginPath();
+    ctx.moveTo(0,h/2-y1*escala); //Convertimos una coordenada y en una posición en píxeles.
+    ctx.lineTo(w,h/2-y2*escala); //Convertimos una coordenada y en una posición en píxeles.
+    ctx.strokeStyle=color;
+    ctx.stroke();
+}
+
+//Definimos la función para dibujar las dos rectas en el lienzo.
+function dibujarrectas(){
+    var c=document.getElementById("myCanvas"); //Busca el canvas con identificador myCanvas y lo almacena en la variable c.
+    var ctx=c.getContext("2d"); //Devuelve un objeto del canvas que contiene las funciones necesarias para dibujar.
+    limpiarcanvas();
+    dibujarrecta(a1,b1,c1,'red'); //Dibujamos la primera recta.
+    dibujarrecta(a2,b2,c2,'blue'); //Dibujamos la segunda recta.
+    //Dibujamos el punto de intersección.
+    ctx.beginPath();
+    ctx.arc(c.width/2+xsol*20,c.height/2-ysol*20,3,0,2*Math.PI);
+    ctx.fillStyle="green";
+    ctx.fill();
+}
+
+//Definimos la función para mostrar los pasos para la resolución del sistema de ecuaciones mediante el método de igualación.
+function resolversistema(){
+    //Declaramos las variables que vamos a utilizar a continuación.
+    let pasos="";
+    let primera,segunda;
+
+    //Resolvemos con el método de igualación.
+    pasos +="$$\\textit{RESOLVEMOS USANDO EL MÉTODO DE IGUALACIÓN}\\\\";
+
+    //Despejamos en ambas ecuaciones la variable y.
+    pasos +="\\textbf{1. Despejamos la variable y en ambas ecuaciones:}\\\\";
+    
+    if(a1>0){ //Si a1 es positivo se pone -.
+        primera="\\frac{"+c1+" - "+Math.abs(a1)+"x}{"+b1+"}"; 
+    }else{ //Si a1 es negativo se pone +.
+        primera="\\frac{"+c1+" + "+Math.abs(a1)+"x}{"+b1+"}"; 
+    }
+    
+    if(a2>0){ //Si a2 es positivo se pone -.
+        segunda="\\frac{"+c2+" - "+Math.abs(a2)+"x}{"+b2+"}"; 
+    }else{ //Si a2 es negativo se pone +.
+        segunda="\\frac{"+c2+" + "+Math.abs(a2)+"x}{"+b2+"}"; 
+    }
+
+    pasos +="y = "+primera+"\\quad \\quad y = "+segunda+"\\\\";
+
+    //Igualamos las dos expresiones.
+    pasos +="\\textbf{2. Igualamos las dos expresiones:}\\\\";
+    pasos +=primera+" = "+segunda+"\\\\";
+
+    //Multiplicamos en cruz.
+    pasos +="\\textbf{3. Multiplicamos en cruz:}\\\\"; //b2*(c1-a1x)=b1*(c2-a2x)
+    
+    //Definimos las variables necesarias.
+    let izquierdaconstante=b2*c1;
+    let izquierdax=-b2*a1;
+    let derechaconstante=b1*c2;
+    let derechax=-b1*a2;
+
+    //Mostramos la multiplicación.
+    pasos +=b2+"\\times (";
+    if(a1>0){ //Si a1 es positivo se pone -.
+      pasos +=c1+" - "+Math.abs(a1)+"x";
+    }else{ //Si a1 es negativo se pone +.
+      pasos +=c1+" + "+Math.abs(a1)+"x";
+    }
+    pasos +=") = "+b1+"\\times (";
+    if(a2>0){ //Si a2 es positivo se pone -.
+      pasos +=c2+" - "+Math.abs(a2)+"x";
+    }else{ //Si a2 es negativo se pone +.
+      pasos +=c2+" + "+Math.abs(a2)+"x";
+    }
+    pasos +=")\\\\";
+ 
+    //Mostramos la multiplicación hecha.
+    pasos +=izquierdaconstante;
+    if(izquierdax>0){ //Si el coeficiente de la izquierda de la x es positivo ponemos +.
+      pasos +="+"+izquierdax+"x";
+    }else{ //Si el coeficiente de la izquierda de la x es negativo no ponemos ningún signo ya que ya lo lleva el coeficiente.
+      pasos +=izquierdax+"x";
+    }
+    pasos +=" = "+derechaconstante;
+    if(derechax>0){ //Si el coeficiente de la derecha de la x es positivo ponemos +.
+      pasos +="+"+derechax+"x";
+    }else{ //Si el coeficiente de la derecha de la x es negativo no ponemos ningún signo ya que ya lo lleva el coeficiente.
+      pasos +=derechax+"x";
+    }
+    pasos +="\\\\";
+   
+    //Pasamos la x a un lado y los números a otro.
+    pasos +="\\textbf{4. Pasamos los términos con x a un lado y los números al otro:}\\\\";
+    let coeficientex=izquierdax-derechax; //Término de la x.
+    let terminoindependiente=derechaconstante-izquierdaconstante; //Términos independientes.
+
+    pasos +=coeficientex+"x = "+terminoindependiente+"\\\\";
+
+    //Despejamos la x.
+    pasos +="\\textbf{5. Despejamos la x:}\\\\";
+    if(coeficientex==0){
+        if(terminoindependiente==0){
+            pasos +="\\textbf{Sistema compatible indeterminado, el sistema de ecuaciones tiene infinitas soluciones.}$$";
+        }else{
+            pasos +="\\textbf{Sistema incompatible, el sistema de ecuaciones no tiene solución.}$$";
+        }
+        document.getElementById("pasos").innerHTML=pasos;
+        limpiarcanvas();
+        return;
+    }
+    //Obtenemos la coordenada de la x de la solución.
+    xsol=terminoindependiente/coeficientex;
+    pasos +="x = \\frac{"+terminoindependiente+"}{"+coeficientex+"}="+xsol.toFixed(2)+"\\\\";
+    //Sustituimos el valor de la x obtenido en una de las ecuaciones para hallar y.
+    pasos +="\\textbf{6. Sustituimos x en la primera ecuación para hallar y:}\\\\";
+    ysol=(c1-a1*xsol)/b1;
+    if(a1>0){
+      pasos +="y = \\frac{"+c1+"-"+Math.abs(a1)+"\\times"+xsol.toFixed(2)+"}{"+b1+"} = "+ysol.toFixed(2)+"\\\\";
+    }else{
+      pasos +="y = \\frac{"+c1+"+"+Math.abs(a1)+"\\times"+xsol.toFixed(2)+"}{"+b1+"} = "+ysol.toFixed(2)+"\\\\";
+    }
+    pasos +="\\textbf{Solución: } (x,y) = ("+xsol.toFixed(2)+", "+ysol.toFixed(2)+")$$";
+    document.getElementById("pasos").innerHTML=pasos;
+    if(typeof MathJax!=='undefined'){ //Verificamos si MathJax está cargado y en caso de que no lo esté, escribe de forma correcta los pasos.
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("pasos")]);
+    }
+    dibujarrectas();
+}
+generarsistema(); //Generamos un sistema de ecuaciones al principio cuando cargamos la página web.
+if(typeof MathJax!=='undefined'){ //Verificamos si MathJax está cargado y en caso de que no lo esté, escribe de forma correcta los pasos.
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("pasos")]);
+}
+</script>
+
+</body>
+</html>
