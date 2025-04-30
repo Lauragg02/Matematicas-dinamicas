@@ -254,7 +254,6 @@ function resolversistema(){
     pasos +=coeficientex+"x = "+terminoindependiente+"\\\\";
 
     //Despejamos la x.
-    pasos +="\\textbf{5. Despejamos la x:}\\\\";
     if(coeficientex==0){
         if(terminoindependiente==0){
             pasos +="\\textbf{Sistema compatible indeterminado, el sistema de ecuaciones tiene infinitas soluciones.}$$";
@@ -262,9 +261,13 @@ function resolversistema(){
             pasos +="\\textbf{Sistema incompatible, el sistema de ecuaciones no tiene solución.}$$";
         }
         document.getElementById("pasos").innerHTML=pasos;
+        if(typeof MathJax!=='undefined'){ //Verificamos si MathJax está cargado y en caso de que no lo esté, escribe de forma correcta los pasos.
+          MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("pasos")]);
+        }
         limpiarcanvas();
         return;
     }
+    pasos +="\\textbf{5. Despejamos la x:}\\\\";
     //Obtenemos la coordenada de la x de la solución.
     xsol=terminoindependiente/coeficientex;
     pasos +="x = \\frac{"+terminoindependiente+"}{"+coeficientex+"}="+xsol.toFixed(2)+"\\\\";
